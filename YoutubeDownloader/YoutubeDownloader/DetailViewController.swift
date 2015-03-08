@@ -50,6 +50,10 @@ class DetailViewController: UIViewController {
 
     }
     @IBAction func doDownload(sender: AnyObject) {
+        let webSerivce = WebServices()
+        videoURL = "http://techslides.com/demos/sample-videos/small.mp4" //videoURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        webSerivce.downloadVideo(NSURL(string: videoURL)!)
+
     }
     
     func loadYoutubeVideo()
