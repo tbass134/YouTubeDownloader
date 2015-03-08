@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="VDE-QS-53l">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="7Ss-a7-B2q">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -34,6 +34,7 @@
                             <outlet property="delegate" destination="VDE-QS-53l" id="xZP-FI-upn"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="rqI-Yc-WZt"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="paB-Jj-N3n" id="IEF-Cz-FCF"/>
                         <segue destination="0Ry-zf-pus" kind="show" identifier="showDetail" id="pke-Hr-v1Y"/>
@@ -50,7 +51,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-147" y="267"/>
+            <point key="canvasLocation" x="665" y="267"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="bhr-HO-LWE">
@@ -64,7 +65,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G7g-Rj-T4e">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G7g-Rj-T4e">
                                 <rect key="frame" x="16" y="28" width="568" height="283"/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yV0-Om-2yQ">
@@ -86,6 +87,15 @@
                                     <action selector="doDownload:" destination="0Ry-zf-pus" eventType="touchUpInside" id="9aQ-Lw-sCf"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvX-hH-Ivg">
+                                <rect key="frame" x="264" y="155" width="73" height="30"/>
+                                <state key="normal" title="Play Video">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playVideo:" destination="0Ry-zf-pus" eventType="touchUpInside" id="8t9-IJ-DAc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -104,7 +114,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nVB-91-vgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="531" y="267"/>
+            <point key="canvasLocation" x="1343" y="267"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="aDd-lq-3ie">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7Ss-a7-B2q" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1Op-II-Xfo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="VDE-QS-53l" kind="relationship" relationship="rootViewController" id="fIo-xg-t91"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aBf-pX-sfP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-147" y="267"/>
         </scene>
     </scenes>
 </document>

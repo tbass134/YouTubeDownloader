@@ -16,7 +16,7 @@ class WebServices: NSObject {
         var thumbnail:String
         
         func description() -> NSString {
-            return title
+            return "title: \(title) url: \(url) thumbnail: \(thumbnail)"
         }
         
     }
@@ -56,7 +56,7 @@ class WebServices: NSObject {
                             //println(obj)
                             var title:String = ""
                             var thumbnail:String = ""
-                            var url:String = ""
+                            var url:String = "test"
                             
                             if let titleObj:AnyObject = obj["title"] {
                                 title = titleObj["$t"] as String
@@ -77,7 +77,7 @@ class WebServices: NSObject {
                                     url = urlObj["href"] as String
                                 }
                             }
-                            var youtubeVideo:YoutubeVideo = YoutubeVideo(title: title, url: thumbnail, thumbnail: thumbnail)
+                            var youtubeVideo:YoutubeVideo = YoutubeVideo(title: title, url: url, thumbnail: thumbnail)
                             videoArray .append(youtubeVideo)
 
 

@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class DetailViewController: UIViewController {
 
-    var youtubeVideo:WebServices.YoutubeVideo
+     var youtubeVideo:WebServices.YoutubeVideo
+     var videoURL:String
     
     
     required init(coder aDecoder: NSCoder) {
         youtubeVideo = WebServices.YoutubeVideo(title: "", url: "", thumbnail: "")
+        videoURL = ""
         super.init(coder: aDecoder)
 
     }
@@ -22,9 +25,12 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        println("title \(youtubeVideo.title)")
+        println(youtubeVideo.description());
+        loadYoutubeVideo()
         
-        // Do any additional setup after loading the view.
+
+    
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,16 +39,41 @@ class DetailViewController: UIViewController {
     }
     
 
+    @IBAction func playVideo(sender: UIButton) {
+        
+        if videoURL != "" {
+            if let mp = MPMoviePlayerViewController(contentURL: NSURL(string:videoURL)) {
+                presentMoviePlayerViewControllerAnimated(mp)
+            }
+            
+        }
+
+    }
     @IBAction func doDownload(sender: AnyObject) {
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func loadYoutubeVideo()
+    {
+        
+        HCYoutubeParser.h264videosWithYoutubeURL(NSURL(string: youtubeVideo.url), completeBlock: { (
+            Dictionary, error) -> Void in
+            println("dict = \(Dictionary)")
+            
+            var urlString:String
+            let dict:NSDictionary = Dictionary as NSDictionary
+            
+            if let smallURL: String = dict["small"] as? String {
+                println(smallURL)
+                self.videoURL = smallURL
+            }
+            else if let liveURL: String = dict["live"] as? String {
+                self.videoURL = liveURL
+            } else
+            {
+                println("could not find url")
+            }
+            
+        })
     }
-    */
-
+    
 }
