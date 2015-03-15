@@ -1,31 +1,26 @@
 //
-//  YTTableViewController.swift
+//  LocalFilesTableViewController.swift
 //  YoutubeDownloader
 //
-//  Created by Tony Hung on 2/28/15.
+//  Created by Tony Hung on 3/14/15.
 //  Copyright (c) 2015 Dark Bear Interactive. All rights reserved.
 //
 
 import UIKit
 
-class YTTableViewController: UITableViewController, UISearchBarDelegate {
+class LocalFilesTableViewController: UITableViewController {
 
     var youtubeResults:[WebServices.YoutubeVideo] = []
-    
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let webSerivce = WebServices()
-//        webSerivce .performSearch("bacon", completion: { (items) -> Void in
-//                println(items)
-//            self.youtubeResults = items
-//            self.tableView.reloadData()
-//        })
+        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        var path = paths.stringByAppendingPathComponent("data.plist")
+        var array: AnyObject? = NSKeyedUnarchiver.unarchiveObjectWithFile(path)
+        youtubeResults = array as [WebServices.YoutubeVideo]!
         
-        
+        self.tableView .reloadData()
+        println(array)
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,10 +41,10 @@ class YTTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
-
         var youtube:WebServices.YoutubeVideo = self.youtubeResults[indexPath.row]
         cell.textLabel?.text = youtube.title
-        // Configure the cell...
+
+        
 
         return cell
     }
@@ -57,7 +52,7 @@ class YTTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var youtube:WebServices.YoutubeVideo = self.youtubeResults[indexPath.row]
         self .performSegueWithIdentifier("showDetail", sender: self)
-
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -66,19 +61,6 @@ class YTTableViewController: UITableViewController, UISearchBarDelegate {
             let indexPath:NSIndexPath = self.tableView.indexPathForSelectedRow()!
             viewController.youtubeVideo = self.youtubeResults[indexPath.row]
         }
-    }
-    
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        let webSerivce = WebServices()
-        webSerivce .performSearch(searchBar.text, completion: { (items) -> Void in
-            println(items)
-            self.youtubeResults = items
-            self.tableView.reloadData()
-        })
-    }
-    func searchBarTextDidEndEditing(searchBar: UISearchBar)
-    {
-        
     }
 
 }

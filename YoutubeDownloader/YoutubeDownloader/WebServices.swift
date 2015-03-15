@@ -10,21 +10,49 @@ import UIKit
 
 class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
    
-    struct YoutubeVideo {
+    class YoutubeVideo : NSObject,NSCoding {
         var title:String
         var url:String
         var thumbnail:String
+        var localURL:String
         
         func description() -> NSString {
-            return "title: \(title) url: \(url) thumbnail: \(thumbnail)"
+            return "title: \(title) url: \(url) thumbnail: \(thumbnail) localURL: \(localURL)"
+        }
+        init (title: String, url: String, thumbnail:String, localURL:String) {
+            self.title = title
+            self.url = url
+            self.thumbnail = thumbnail
+            self.localURL = localURL
         }
         
+        required init(coder aDecoder: NSCoder) {
+            title = aDecoder.decodeObjectForKey("title") as String
+            url = aDecoder.decodeObjectForKey("url") as String
+            thumbnail = aDecoder.decodeObjectForKey("thumbnail") as String
+            localURL = aDecoder.decodeObjectForKey("localURL") as String
+
+        }
+        
+        func encodeWithCoder(aCoder: NSCoder) {
+            aCoder.encodeObject(title, forKey: "title")
+            aCoder.encodeObject(url, forKey: "url")
+            aCoder.encodeObject(thumbnail, forKey: "thumbnail")
+            aCoder.encodeObject(localURL, forKey: "localURL")
+
+        }
+
     }
+    override init()
+    {
+        theObject = YoutubeVideo(title: "", url: "", thumbnail: "",localURL: "")
+    }
+    
     func performSearch(searchTerm:String, completion:([YoutubeVideo])->Void) {
         
         var videoArray:[YoutubeVideo] = []
         
-        var request = NSMutableURLRequest (URL: NSURL (string: "http://gdata.youtube.com/feeds/api/videos?q=bacon&max-results=5&alt=json")!)
+        var request = NSMutableURLRequest (URL: NSURL (string: ("http://gdata.youtube.com/feeds/api/videos?q=\(searchTerm)&max-results=5&alt=json"))!)
     
         var session = NSURLSession.sharedSession()
         
@@ -77,7 +105,7 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
                                     url = urlObj["href"] as String
                                 }
                             }
-                            var youtubeVideo:YoutubeVideo = YoutubeVideo(title: title, url: url, thumbnail: thumbnail)
+                            var youtubeVideo:YoutubeVideo = YoutubeVideo(title: title, url: url, thumbnail: thumbnail, localURL:"")
                             videoArray .append(youtubeVideo)
 
 
@@ -102,8 +130,10 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
     typealias CompleteHandlerBlock = () -> ()
     var handlerQueue: [String : CompleteHandlerBlock]!
 
-    func downloadVideo(url:NSURL) {
+    var theObject:YoutubeVideo;
+    func downloadVideo(url:NSURL, object:YoutubeVideo) {
         
+        theObject = object;
         var request:NSURLRequest = NSURLRequest(URL: url)
         var configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.darkbearinteractive.youtubedownloder")
         
@@ -127,10 +157,37 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
         let fileManger = NSFileManager.defaultManager()
         let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsURL = paths[0] as NSURL
+        
+        var title =  theObject.title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        var filename = documentsURL .URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
+        
         var error:NSError?
         
-        if fileManger.moveItemAtURL(location, toURL: documentsURL, error: &error) {
+        println("moving to documents \(filename)")
+        
+        if fileManger.moveItemAtURL(location, toURL: filename, error: &error) {
             println("Move successful")
+            theObject.localURL = filename.relativePath!
+            
+            var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+            var path = paths.stringByAppendingPathComponent("data.plist")
+            var fileManager = NSFileManager.defaultManager()
+            if (!(fileManager.fileExistsAtPath(path)))
+            {
+                var bundle : NSString = NSBundle.mainBundle().pathForResource("data", ofType: "plist")!
+                fileManager.copyItemAtPath(bundle, toPath: path, error:nil)
+            }
+            if var array = NSMutableArray(contentsOfFile: path) {
+                array.addObject(theObject)
+                var data = NSKeyedArchiver.archivedDataWithRootObject(array)
+                data.writeToFile(path, atomically: true)
+            } else {
+                var array = NSMutableArray()
+                array.addObject(theObject)
+                var data = NSKeyedArchiver.archivedDataWithRootObject(array)
+                data.writeToFile(path, atomically: true)
+            }
+            
         } else {
             println("Moved failed with error: \(error!.localizedDescription)")
         }
@@ -157,9 +214,9 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
     func URLSessionDidFinishEventsForBackgroundURLSession(session: NSURLSession) {
         println("background session \(session) finished events.")
         
-//        if !session.configuration.identifier.isEmpty {
-//            callCompletionHandlerForSession(session.configuration.identifier)
-//        }
+        if !session.configuration.identifier.isEmpty {
+            callCompletionHandlerForSession(session.configuration.identifier)
+        }
     }
     
     //MARK: completion handler

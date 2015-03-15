@@ -16,7 +16,7 @@ class DetailViewController: UIViewController {
     
     
     required init(coder aDecoder: NSCoder) {
-        youtubeVideo = WebServices.YoutubeVideo(title: "", url: "", thumbnail: "")
+        youtubeVideo = WebServices.YoutubeVideo(title: "", url: "", thumbnail: "", localURL: "")
         videoURL = ""
         super.init(coder: aDecoder)
 
@@ -26,11 +26,21 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         println(youtubeVideo.description());
-        loadYoutubeVideo()
-        
+        if youtubeVideo.localURL == "" {
+            loadYoutubeVideo()
+        } else {
+            let fileManger = NSFileManager.defaultManager()
+            let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+            let documentsURL = paths[0] as NSURL
+            
+            var title =  youtubeVideo.title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            var filename = documentsURL .URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
+            var url = documentsURL.URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
+            
+            videoURL = url.absoluteString!
+            println("videoURL \(videoURL)")
+        }
 
-    
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,7 +51,9 @@ class DetailViewController: UIViewController {
 
     @IBAction func playVideo(sender: UIButton) {
         
+        
         if videoURL != "" {
+            
             if let mp = MPMoviePlayerViewController(contentURL: NSURL(string:videoURL)) {
                 presentMoviePlayerViewControllerAnimated(mp)
             }
@@ -51,8 +63,8 @@ class DetailViewController: UIViewController {
     }
     @IBAction func doDownload(sender: AnyObject) {
         let webSerivce = WebServices()
-        videoURL = "http://techslides.com/demos/sample-videos/small.mp4" //videoURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        webSerivce.downloadVideo(NSURL(string: videoURL)!)
+        videoURL = videoURL.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        webSerivce.downloadVideo(NSURL(string: videoURL)!, object: youtubeVideo)
 
     }
     

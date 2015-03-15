@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4514F61C1AB4E880003733A4 /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4514F61B1AB4E880003733A4 /* data.plist */; };
+		4514F61E1AB4EB54003733A4 /* LocalFilesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4514F61D1AB4EB54003733A4 /* LocalFilesTableViewController.swift */; };
 		45D9AA171AA27246008F0773 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D9AA161AA27246008F0773 /* AppDelegate.swift */; };
 		45D9AA1C1AA27246008F0773 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45D9AA1A1AA27246008F0773 /* Main.storyboard */; };
 		45D9AA1E1AA27246008F0773 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45D9AA1D1AA27246008F0773 /* Images.xcassets */; };
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4514F61B1AB4E880003733A4 /* data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
+		4514F61D1AB4EB54003733A4 /* LocalFilesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalFilesTableViewController.swift; sourceTree = "<group>"; };
 		458C6FE71AABBE6E0008BF8C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		45D9AA111AA27246008F0773 /* YoutubeDownloader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoutubeDownloader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45D9AA151AA27246008F0773 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 				458C6FE71AABBE6E0008BF8C /* Bridging-Header.h */,
 				45D9AA161AA27246008F0773 /* AppDelegate.swift */,
 				45D9AA361AA2728D008F0773 /* YTTableViewController.swift */,
+				4514F61D1AB4EB54003733A4 /* LocalFilesTableViewController.swift */,
 				45D9AA3C1AA28FAD008F0773 /* DetailViewController.swift */,
 				45D9AA3A1AA274DD008F0773 /* WebServices.swift */,
 				45D9AA1A1AA27246008F0773 /* Main.storyboard */,
@@ -106,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				45D9AA151AA27246008F0773 /* Info.plist */,
+				4514F61B1AB4E880003733A4 /* data.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 			files = (
 				45D9AA1C1AA27246008F0773 /* Main.storyboard in Resources */,
 				45D9AA211AA27246008F0773 /* LaunchScreen.xib in Resources */,
+				4514F61C1AB4E880003733A4 /* data.plist in Resources */,
 				45D9AA1E1AA27246008F0773 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45D9AA371AA2728D008F0773 /* YTTableViewController.swift in Sources */,
+				4514F61E1AB4EB54003733A4 /* LocalFilesTableViewController.swift in Sources */,
 				45D9AA171AA27246008F0773 /* AppDelegate.swift in Sources */,
 				45D9AA3B1AA274DD008F0773 /* WebServices.swift in Sources */,
 				45D9AA3D1AA28FAD008F0773 /* DetailViewController.swift in Sources */,
