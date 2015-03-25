@@ -14,9 +14,13 @@ class DetailViewController: UIViewController {
      var youtubeVideo:WebServices.YoutubeVideo
      var videoURL:String
     
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var videoText: UITextView!
+    @IBOutlet weak var downloadButton: UIButton!
+
     
     required init(coder aDecoder: NSCoder) {
-        youtubeVideo = WebServices.YoutubeVideo(title: "", url: "", thumbnail: "", localURL: "")
+        youtubeVideo = WebServices.YoutubeVideo()
         videoURL = ""
         super.init(coder: aDecoder)
 
@@ -33,12 +37,20 @@ class DetailViewController: UIViewController {
             let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
             let documentsURL = paths[0] as NSURL
             
-            var title =  youtubeVideo.title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            var filename = documentsURL .URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
-            var url = documentsURL.URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
+            if var title = youtubeVideo.title {
+                var theTitle = title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                var filename = documentsURL .URLByAppendingPathComponent(theTitle).URLByAppendingPathExtension("mp4")
+                var url = documentsURL.URLByAppendingPathComponent(theTitle).URLByAppendingPathExtension("mp4")
+                
+                videoURL = url.absoluteString!
+                downloadButton.enabled = false
+                
+                println("videoURL \(videoURL)")
+            }
+        }
+        
+        if youtubeVideo.thumbnail != "" {
             
-            videoURL = url.absoluteString!
-            println("videoURL \(videoURL)")
         }
 
     }
@@ -71,22 +83,24 @@ class DetailViewController: UIViewController {
     func loadYoutubeVideo()
     {
         
-        HCYoutubeParser.h264videosWithYoutubeURL(NSURL(string: youtubeVideo.url), completeBlock: { (
-            Dictionary, error) -> Void in
-            println("dict = \(Dictionary)")
+        HCYoutubeParser.h264videosWithYoutubeURL(NSURL(string: youtubeVideo.url!), completeBlock: { (
+            dictionary, error) -> Void in
+            println("dict = \(dictionary)")
             
             var urlString:String
-            let dict:NSDictionary = Dictionary as NSDictionary
-            
-            if let smallURL: String = dict["small"] as? String {
-                println(smallURL)
-                self.videoURL = smallURL
-            }
-            else if let liveURL: String = dict["live"] as? String {
-                self.videoURL = liveURL
-            } else
-            {
-                println("could not find url")
+            if (dictionary != nil) {
+                let dict:NSDictionary = dictionary as NSDictionary
+                
+                if let smallURL: String = dict["small"] as? String {
+                    println(smallURL)
+                    self.videoURL = smallURL
+                }
+                else if let liveURL: String = dict["live"] as? String {
+                    self.videoURL = liveURL
+                } else
+                {
+                    println("could not find url")
+                }
             }
             
         })

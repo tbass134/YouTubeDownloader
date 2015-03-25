@@ -11,15 +11,15 @@ import UIKit
 class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
    
     class YoutubeVideo : NSObject,NSCoding {
-        var title:String
-        var url:String
-        var thumbnail:String
-        var localURL:String
+        var title:String?
+        var url:String?
+        var thumbnail:String?
+        var localURL:String?
         
         func description() -> NSString {
             return "title: \(title) url: \(url) thumbnail: \(thumbnail) localURL: \(localURL)"
         }
-        init (title: String, url: String, thumbnail:String, localURL:String) {
+        init (title: String? = nil, url: String? = nil, thumbnail:String? = nil, localURL:String? = nil) {
             self.title = title
             self.url = url
             self.thumbnail = thumbnail
@@ -27,10 +27,10 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
         }
         
         required init(coder aDecoder: NSCoder) {
-            title = aDecoder.decodeObjectForKey("title") as String
-            url = aDecoder.decodeObjectForKey("url") as String
-            thumbnail = aDecoder.decodeObjectForKey("thumbnail") as String
-            localURL = aDecoder.decodeObjectForKey("localURL") as String
+            title = aDecoder.decodeObjectForKey("title") as? String
+            url = aDecoder.decodeObjectForKey("url") as? String
+            thumbnail = aDecoder.decodeObjectForKey("thumbnail") as? String
+            localURL = aDecoder.decodeObjectForKey("localURL") as? String
 
         }
         
@@ -48,26 +48,33 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
         theObject = YoutubeVideo(title: "", url: "", thumbnail: "",localURL: "")
     }
     
-    func performSearch(searchTerm:String, completion:([YoutubeVideo])->Void) {
+    func performSearch(searchTerm:String, completion:(results:[YoutubeVideo], error:NSError?)->Void) {
         
         var videoArray:[YoutubeVideo] = []
         
-        var request = NSMutableURLRequest (URL: NSURL (string: ("http://gdata.youtube.com/feeds/api/videos?q=\(searchTerm)&max-results=5&alt=json"))!)
+        var string = "http://gdata.youtube.com/feeds/api/videos?q=\(searchTerm)&max-results=5&alt=json"
+        var encodedString = string.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
+        
+        
+        var request = NSURLRequest (URL: NSURL (string: encodedString!)!)
+        println("request =\(request.URL)")
     
         var session = NSURLSession.sharedSession()
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            //println("Response: \(response)")
+            println("Response: \(response)")
             var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            //println("Body: \(strData)")
+            println("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary
             
             // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
             if(err != nil) {
-                println(err!.localizedDescription)
+                println(err?.localizedDescription)
                 let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
                 println("Error could not parse JSON: '\(jsonStr)'")
+                completion(results: [], error: err)
+
             }
             else {
                 // The JSONObjectWithData constructor didn't return an error. But, we should still
@@ -105,14 +112,15 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
                                     url = urlObj["href"] as String
                                 }
                             }
+                            println("title = \(title) url = \(url) thumbnail = \(thumbnail)")
                             var youtubeVideo:YoutubeVideo = YoutubeVideo(title: title, url: url, thumbnail: thumbnail, localURL:"")
                             videoArray .append(youtubeVideo)
 
 
                         }
+                        completion(results: videoArray,error:error?)
 
                     }
-                    completion(videoArray)
                     
                 }
                     
@@ -120,6 +128,8 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
                     // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
                     let jsonStr = NSString(data: data, encoding: NSUTF8StringEncoding)
                     println("Error could not parse JSON: \(jsonStr)")
+                    completion(results: [], error: error?)
+
                 }
             }
         })
@@ -158,38 +168,41 @@ class WebServices: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate {
         let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsURL = paths[0] as NSURL
         
-        var title =  theObject.title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        var filename = documentsURL .URLByAppendingPathComponent(title).URLByAppendingPathExtension("mp4")
         
-        var error:NSError?
-        
-        println("moving to documents \(filename)")
-        
-        if fileManger.moveItemAtURL(location, toURL: filename, error: &error) {
-            println("Move successful")
-            theObject.localURL = filename.relativePath!
+        if let title = theObject.title {
+            var theTitle =  title.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            var filename = documentsURL .URLByAppendingPathComponent(theTitle).URLByAppendingPathExtension("mp4")
             
-            var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-            var path = paths.stringByAppendingPathComponent("data.plist")
-            var fileManager = NSFileManager.defaultManager()
-            if (!(fileManager.fileExistsAtPath(path)))
-            {
-                var bundle : NSString = NSBundle.mainBundle().pathForResource("data", ofType: "plist")!
-                fileManager.copyItemAtPath(bundle, toPath: path, error:nil)
-            }
-            if var array = NSMutableArray(contentsOfFile: path) {
-                array.addObject(theObject)
-                var data = NSKeyedArchiver.archivedDataWithRootObject(array)
-                data.writeToFile(path, atomically: true)
+            var error:NSError?
+            
+            println("moving to documents \(filename)")
+            
+            if fileManger.moveItemAtURL(location, toURL: filename, error: &error) {
+                println("Move successful")
+                theObject.localURL = filename.relativePath!
+                
+                var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                var path = paths.stringByAppendingPathComponent("data.plist")
+                var fileManager = NSFileManager.defaultManager()
+                if (!(fileManager.fileExistsAtPath(path)))
+                {
+                    var bundle : NSString = NSBundle.mainBundle().pathForResource("data", ofType: "plist")!
+                    fileManager.copyItemAtPath(bundle, toPath: path, error:nil)
+                }
+                if var array = NSMutableArray(contentsOfFile: path) {
+                    array.addObject(theObject)
+                    var data = NSKeyedArchiver.archivedDataWithRootObject(array)
+                    data.writeToFile(path, atomically: true)
+                } else {
+                    var array = NSMutableArray()
+                    array.addObject(theObject)
+                    var data = NSKeyedArchiver.archivedDataWithRootObject(array)
+                    data.writeToFile(path, atomically: true)
+                }
+                
             } else {
-                var array = NSMutableArray()
-                array.addObject(theObject)
-                var data = NSKeyedArchiver.archivedDataWithRootObject(array)
-                data.writeToFile(path, atomically: true)
+                println("Moved failed with error: \(error!.localizedDescription)")
             }
-            
-        } else {
-            println("Moved failed with error: \(error!.localizedDescription)")
         }
     }
     

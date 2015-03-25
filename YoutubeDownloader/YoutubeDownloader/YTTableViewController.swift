@@ -12,20 +12,15 @@ class YTTableViewController: UITableViewController, UISearchBarDelegate {
 
     var youtubeResults:[WebServices.YoutubeVideo] = []
     
+    var activityIndicatior = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        let webSerivce = WebServices()
-//        webSerivce .performSearch("bacon", completion: { (items) -> Void in
-//                println(items)
-//            self.youtubeResults = items
-//            self.tableView.reloadData()
-//        })
-        
-        
+        activityIndicatior.center = self.tableView.center
+        let keyWindow = UIApplication.sharedApplication().keyWindow
+        keyWindow?.addSubview(activityIndicatior)
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,10 +65,22 @@ class YTTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         let webSerivce = WebServices()
-        webSerivce .performSearch(searchBar.text, completion: { (items) -> Void in
+        activityIndicatior.startAnimating()
+
+        webSerivce .performSearch(searchBar.text, completion: { (items, error:NSError?) -> Void in
             println(items)
-            self.youtubeResults = items
-            self.tableView.reloadData()
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                if (error != nil) {
+                    let alertView = UIAlertView(title: "error", message: error!.description, delegate: nil, cancelButtonTitle: nil, otherButtonTitles: "OK")
+                    alertView.show()
+                }
+                
+                self.activityIndicatior.stopAnimating()
+                
+                self.youtubeResults = items
+                self.tableView.reloadData()
+            })
         })
     }
     func searchBarTextDidEndEditing(searchBar: UISearchBar)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="qsB-GX-K4l">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="qsB-GX-K4l">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -17,20 +17,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G7g-Rj-T4e">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G7g-Rj-T4e">
                                 <rect key="frame" x="16" y="28" width="568" height="283"/>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yV0-Om-2yQ">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yV0-Om-2yQ">
                                 <rect key="frame" x="16" y="319" width="568" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="Xgn-Fc-Oi8"/>
+                                    <constraint firstAttribute="height" constant="128" id="NVu-df-uJK"/>
                                 </constraints>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rxr-cg-VnM">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rxr-cg-VnM">
                                 <rect key="frame" x="277" y="495" width="69" height="30"/>
                                 <state key="normal" title="Download">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -39,7 +39,7 @@
                                     <action selector="doDownload:" destination="0Ry-zf-pus" eventType="touchUpInside" id="9aQ-Lw-sCf"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvX-hH-Ivg">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvX-hH-Ivg">
                                 <rect key="frame" x="264" y="155" width="73" height="30"/>
                                 <state key="normal" title="Play Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,22 +51,28 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Rxr-cg-VnM" firstAttribute="top" secondItem="yV0-Om-2yQ" secondAttribute="bottom" constant="48" id="8oB-d0-btX"/>
-                            <constraint firstItem="Rxr-cg-VnM" firstAttribute="leading" secondItem="PI7-Ch-I9w" secondAttribute="leadingMargin" constant="261" id="90Y-mH-uBX"/>
-                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="trailing" secondItem="PI7-Ch-I9w" secondAttribute="trailingMargin" id="K7b-hy-siP"/>
-                            <constraint firstItem="G7g-Rj-T4e" firstAttribute="top" secondItem="oVq-fn-lDv" secondAttribute="bottom" constant="8" symbolic="YES" id="MCy-FU-RSm"/>
-                            <constraint firstItem="G7g-Rj-T4e" firstAttribute="leading" secondItem="PI7-Ch-I9w" secondAttribute="leadingMargin" id="MJy-Fn-Qzn"/>
-                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="leading" secondItem="PI7-Ch-I9w" secondAttribute="leadingMargin" id="UFg-BC-0So"/>
-                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="top" secondItem="G7g-Rj-T4e" secondAttribute="bottom" constant="8" symbolic="YES" id="hZd-2M-yF2"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="G7g-Rj-T4e" secondAttribute="trailing" id="hsE-Ye-0PZ"/>
-                            <constraint firstItem="Rxr-cg-VnM" firstAttribute="leading" secondItem="yV0-Om-2yQ" secondAttribute="trailing" constant="-307" id="vUC-pA-rKa"/>
-                            <constraint firstItem="EBI-kz-rv7" firstAttribute="top" secondItem="Rxr-cg-VnM" secondAttribute="bottom" constant="75" id="vfi-Hf-Zxa"/>
+                            <constraint firstItem="G7g-Rj-T4e" firstAttribute="top" secondItem="PI7-Ch-I9w" secondAttribute="topMargin" constant="28" id="1Wq-7C-vOQ"/>
+                            <constraint firstItem="EBI-kz-rv7" firstAttribute="top" secondItem="Rxr-cg-VnM" secondAttribute="bottom" constant="26" id="3Le-sP-6vj"/>
+                            <constraint firstItem="BvX-hH-Ivg" firstAttribute="top" secondItem="oVq-fn-lDv" secondAttribute="bottom" constant="91" id="CoW-es-a9B"/>
+                            <constraint firstItem="G7g-Rj-T4e" firstAttribute="centerX" secondItem="BvX-hH-Ivg" secondAttribute="centerX" id="UFi-UO-Mfu"/>
+                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="leading" secondItem="G7g-Rj-T4e" secondAttribute="leading" id="VgL-hb-Ijq"/>
+                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="trailing" secondItem="PI7-Ch-I9w" secondAttribute="trailingMargin" id="Z5Z-N7-qSb"/>
+                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="leading" secondItem="PI7-Ch-I9w" secondAttribute="leadingMargin" id="ZC9-US-POC"/>
+                            <constraint firstItem="Rxr-cg-VnM" firstAttribute="leading" secondItem="PI7-Ch-I9w" secondAttribute="leading" constant="277" id="flr-1U-zSv"/>
+                            <constraint firstItem="yV0-Om-2yQ" firstAttribute="top" secondItem="G7g-Rj-T4e" secondAttribute="bottom" constant="8" symbolic="YES" id="gZQ-gq-JFr"/>
+                            <constraint firstItem="G7g-Rj-T4e" firstAttribute="trailing" secondItem="yV0-Om-2yQ" secondAttribute="trailing" id="k4r-g0-aXf"/>
+                            <constraint firstItem="Rxr-cg-VnM" firstAttribute="top" secondItem="yV0-Om-2yQ" secondAttribute="bottom" constant="48" id="tvW-bb-mQx"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="downloadButton" destination="Rxr-cg-VnM" id="Qau-FG-Ecg"/>
+                        <outlet property="imageView" destination="G7g-Rj-T4e" id="aXF-1A-8uc"/>
+                        <outlet property="videoText" destination="yV0-Om-2yQ" id="Nqi-xR-6wq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nVB-91-vgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2967" y="267"/>
+            <point key="canvasLocation" x="2303" y="259"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="vJi-Ue-gZ2">
